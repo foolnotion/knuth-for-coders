@@ -1,8 +1,11 @@
 # Knuth for Coders
 
-A Claude Code skill: thirty rules for writing prose about code (explanations,
-PR descriptions, review comments, incident writeups, docstrings), adapted
-from a course on mathematical exposition.
+A Claude Code skill: twenty-four rules for writing prose about code
+(explanations, PR descriptions, review comments, incident writeups,
+docstrings), adapted from a course on mathematical exposition. Started as
+thirty rules; six were trimmed as duplicates of the companion
+`senior-developer-writing` skill and folded into it instead. See
+[Relationship to senior-developer-writing](#relationship-to-senior-developer-writing).
 
 ## Provenance
 
@@ -33,37 +36,56 @@ were pulled out:
   Stemer on precise modifier placement, Halmos on the two rules everything
   else reduces to.
 
-Each of the 30 rules in `SKILL.md` traces to one or more specific points in
+Each of the 24 rules in `SKILL.md` traces to one or more specific points in
 that material. The mapping below gives the section number (§) for each;
 section numbers refer to the table of contents in the source PDF.
 
 | SKILL.md rule | Source |
 |---|---|
 | 1–3 | §1, points 1–3 (word/symbol separation, sentence-opening symbols, logic symbols in prose) |
-| 4 | §1, point 14 (consistent notation) |
-| 5 | §1, point 15 (subscript discipline) |
-| 6 | §1, point 6 ("we" vs. passive vs. "I") |
-| 7 | §1, point 7; §7 (Lamport: read at speed) |
-| 8 | §1, point 9 (vary structure, use parallelism deliberately) |
-| 9 | §1, point 10 (homework-list style vs. running commentary) |
-| 10 | §1, point 11 (state definitions twice) |
-| 11 | §1, point 12; §27 (Wilf); §34 (Nilsson) |
-| 12 | §1, point 13 (readers skim formulas) |
-| 13 | §1, point 16 (display and label important formulas) |
-| 14 | §1, point 17 (left-to-right readability) |
-| 15 | §10–11 (WEB / literate-programming exposition order) |
-| 16–17 | §1, point 26; §13 (AWK manual, writing for the novice) |
-| 18 | §30 (Ullman: state the types of your variables) |
-| 19 | §30 (Ullman: forbids non-referential "this") |
-| 20 | §30 (Ullman: keep definitions and uses close together) |
-| 21 | §41 (Stemer: modifier placement, hedge words) |
-| 22, 24 | §30 (Ullman: use lots of examples); §27 (Wilf: motivation in moderation) |
-| 23 | §31 (Lamport: examples keep you honest) |
-| 25 | §12 (WEB error-handling modules) |
-| 26 | §5 (precision: "not nonincreasing" vs. "increasing") |
-| 27 | §6 (Knuth: ship it eventually) |
-| 28, 29 | §34 (Nilsson: avoid recycling; simplify, then add detail back) |
-| 30 | §15 (referee's report: complete algorithm, proof, limitations) |
+| 4 | §1, point 15 (subscript discipline) |
+| 5 | §1, point 6 ("we" vs. passive vs. "I") |
+| 6 | §1, point 7; §7 (Lamport: read at speed) |
+| 7 | §1, point 9 (vary structure, use parallelism deliberately) |
+| 8 | §1, point 11 (state definitions twice) |
+| 9 | §1, point 12; §27 (Wilf); §34 (Nilsson) |
+| 10 | §1, point 13 (readers skim formulas) |
+| 11 | §1, point 16 (display and label important formulas) |
+| 12 | §10–11 (WEB / literate-programming exposition order) |
+| 13–14 | §1, point 26; §13 (AWK manual, writing for the novice) |
+| 15 | §30 (Ullman: forbids non-referential "this") |
+| 16 | §41 (Stemer: modifier placement, hedge words) |
+| 17, 19 | §30 (Ullman: use lots of examples); §27 (Wilf: motivation in moderation) |
+| 18 | §31 (Lamport: examples keep you honest) |
+| 20 | §12 (WEB error-handling modules) |
+| 21 | §5 (precision: "not nonincreasing" vs. "increasing") |
+| 22 | §6 (Knuth: ship it eventually) |
+| 23, 24 | §34 (Nilsson: avoid recycling; simplify, then add detail back) |
+
+## Relationship to senior-developer-writing
+
+This repository's rules were compared against the companion
+`~/.claude/skills/senior-developer-writing` skill, which covers response
+structure, debugging workflow, risk ordering, and hallucination guardrails:
+material entirely outside this book's scope (Knuth's course predates that
+failure mode by decades). Six rules turned out to duplicate rules already
+in that skill and were removed from here on 2026-08-15, with their content
+folded into `senior-developer-writing` instead:
+
+| Removed from here | Source | Folded into senior-developer-writing |
+|---|---|---|
+| naming consistency, "one name per concept" | §1, point 14 | Core Rules #6 |
+| don't hand the reader a bare fact list | §1, point 10 | Core Rules #8 |
+| left-to-right readability (generic form) | §1, point 17 | Core Rules #9 |
+| state the type of a variable before using it | Ullman §30 | Core Rules #5 |
+| keep a definition next to its use | Ullman §30 | Core Rules #5 |
+| review should give a complete, non-scorekeeping picture | §15 (referee's report) | Review section |
+
+The three rules that remained closest to the code-writing craft of naming,
+sentence rhythm, and examples stayed here; the four blocks with no
+equivalent in `senior-developer-writing` (examples as evidence, the
+boilerplate-reuse warning, the simplify-then-refine ordering, and the
+read-at-speed check) were ported into it in the same pass.
 
 **Adaptation, not transcription.** The source is about theorems and proofs;
 none of its examples are about code. Every "before/after" pair in
