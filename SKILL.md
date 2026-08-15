@@ -1,122 +1,181 @@
 ---
 name: knuth-for-coders
-description: Use when writing or reviewing prose about code for a senior developer audience (explanations, PR descriptions, review comments, incident writeups, docstrings) and a precise, source-grounded discipline on naming, sentence craft, and examples is wanted. Companion to the senior-developer-writing skill, which covers response structure, debugging workflow, risk ordering, and hallucination guardrails; this skill covers the sentence and paragraph level.
+description: Use when writing, editing, reviewing, explaining, or debugging technical material for senior software developers, especially LLM responses about code, architecture, incidents, tests, and patches. Applies Knuth-inspired clarity, evidence, and safe engineering-response discipline.
 ---
 
 # Knuth for Coders
 
-Twenty-four rules adapted from Donald Knuth, Tracy Larrabee, and Paul
-Roberts, *Mathematical Writing* (MAA Notes 14, 1989): the transcript of a
-Stanford course on mathematical exposition, including guest lectures by
-Herb Wilf, Jeff Ullman, Leslie Lamport, Nils Nilsson, Mary-Claire van
-Leunen, Paul Halmos, and Rosalie Stemer. Mathematics and code both traffic
-in objects that must be named precisely and claims that must be justified
-precisely; these rules carry that discipline over.
+Write for a capable, time-constrained developer who is reading beside an
+editor, terminal, diff, test output, or incident dashboard.
 
-Full source citations and provenance: see README.md in this repository.
-A styled version of this material, including the six rules trimmed here
-as duplicates of the senior-developer-writing skill, lives at:
-https://claude.ai/code/artifact/f0c2eeec-0c5b-46c9-92dd-93c0231a0f89
+Adapted from the reader-first discipline in Donald Knuth, Tracy Larrabee, and
+Paul Roberts, *Mathematical Writing* (MAA Notes 14, 1989). The source governs
+the prose rules below; the debugging, risk, and verification rules extend that
+discipline to modern LLM-assisted software engineering.
 
-For response structure, debugging workflow, risk ordering, hallucination
-guardrails, and code review structure, see the senior-developer-writing
-skill. This skill focuses on naming, sentence craft, and examples: the
-level below where that skill operates.
+Optimize for the reader's ability to reconstruct the reasoning, assess the
+tradeoffs, and act safely. Do not optimize for minimum length at the expense
+of causal reasoning, conditions, or verification.
 
-The two rules everything below is a special case of (Halmos): organize the
-material. Do not distract the reader.
+## Core Rules
 
-## Naming and notation
+1. Lead with the outcome: the diagnosis, finding, recommendation, or result.
+2. State the purpose before explaining the mechanism.
+3. Separate observations, inferences, assumptions, and recommendations.
+4. Support claims with local evidence: file paths, symbols, logs, tests,
+   commands, or clearly labeled assumptions.
+5. Define non-obvious terms, identifiers, and notation before relying on them.
+6. Use one name for one concept. Preserve the codebase's established
+   vocabulary unless a distinction is intentional.
+7. Explain behavior, invariants, side effects, failure paths, and tradeoffs;
+   do not narrate obvious syntax line by line.
+8. Connect nontrivial code, commands, formulas, and claims with prose that
+   says what they establish and why they matter.
+9. Make sentences understandable from left to right. Prefer direct verbs,
+   concrete subjects, and unambiguous references over dense noun stacks and
+   vague pronouns.
+10. Be concise by removing filler, not reasoning. Keep words such as
+    "because", "if", "unless", and "therefore" when they expose a
+    dependency or constraint.
+11. Do not call something obvious, robust, scalable, safe, or production-ready
+    without stating the observable property that justifies the claim.
+12. Never invent repository state, command output, APIs, benchmarks, or test
+    results. State exactly what was verified and what remains unverified.
+13. Do not reuse a caveat, disclaimer, or explanation verbatim across
+    responses. Check that it still fits the current context; the new
+    situation almost certainly has a different emphasis than whatever the
+    boilerplate was originally written for.
 
-1. State the relationship between two identifiers in words. Two backticked
-   names placed side by side force the reader to guess the connective.
-2. Don't open a sentence with a bare code token. Give the reader a noun to
-   hang it on first: "The retry counter (`retries++`) increments before..."
-   not "`retries++` happens before...".
-3. Write the connective in English inside prose; don't let `&&`, `=>`, or
-   other operator symbols stand in for "and", "or", "implies".
-4. Stop indexing and start naming once there's something to distinguish.
-   `producer`/`consumer` carries the distinction the name needs; `client1`/
-   `client2` makes the reader keep re-deriving it.
+## Knuth-Derived Prose Craft
 
-## Sentence and paragraph mechanics
+- State the relationship between two identifiers in words. Do not place two
+  backticked names or expressions side by side and make the reader infer the
+  connective.
+- Do not open a sentence with a bare code token. Give the reader a noun first:
+  write "The retry counter (`retries++`) increments...", not "`retries++`
+  increments...".
+- Write connectives in English inside prose. Do not let `&&`, `=>`, or another
+  operator stand in for "and", "or", or "implies".
+- Prefer role names such as `producer` and `consumer` over arbitrary indexes
+  such as `client1` and `client2` when the roles are what distinguish them.
+- Prefer a direct statement or inclusive "we" over passive voice and
+  first-person hedging. Use parallel syntax for genuinely parallel ideas, but
+  vary sentence shape when the ideas differ.
+- State an important definition or decision twice in complementary forms when
+  that helps a skimming reader: once formally or operationally, then once in
+  plain language.
+- Write so the explanation holds together when a reader skips every code
+  block. Pull a load-bearing line, configuration value, or command onto its
+  own line if it will be referenced later.
+- Introduce information when the reader needs it, not necessarily in execution
+  order. Expository order and runtime order are often different.
+- Unpack dense noun stacks. Write for a competent engineer without this exact
+  local context, not only for people who already know the incident or code.
+- Give "this" an explicit antecedent. Place modifiers where they make the
+  intended scope exact, and remove hedges that add no information.
+- Give edge cases and failure modes the same explanatory care as the main
+  path. State the narrowest true scope: "fixed for this reproduction" is not
+  the same claim as "fixed".
 
-5. Prefer a direct statement or "we" over passive voice, and skip
-   first-person hedging. "Moving the lock outside the loop removes the
-   contention," not "it was determined that the lock should be moved."
-6. Read a nontrivial explanation once at normal reading speed before
-   sending it. Rhythm problems surface at speed, not while composing.
-7. Use matching sentence templates for genuinely parallel items (three
-   renamed functions described the same way signals they're the same kind
-   of change). Vary the template when the items actually differ.
-8. State an important definition or decision twice, in different words.
-   Restating it reinforces it for a reader who is skimming, which is most
-   readers most of the time.
+## Response Structure
 
-## Structure, order, and motivation
+Use the smallest useful subset of this sequence:
 
-9. Before the diff or the fix, say what problem it solves and why it
-   matters now. Keep the reader uppermost in mind: what do they know
-   already, what do they expect next, and why?
-10. Write so the explanation holds together if the reader skips every code
-    block. Most readers skim past anything that looks like a snippet on
-    the first pass; if the surrounding prose doesn't carry the argument
-    alone, the code isn't carrying it either.
-11. Pull the load-bearing line, config value, or command onto its own
-    line if it will be referred back to later in the same response.
-12. Introduce a piece of the explanation at the moment the reader needs
-    it, not necessarily the order the code executes in. The best order for
-    exposition and the best order for a machine to run something are
-    frequently different orders.
+```text
+Context -> finding -> cause -> change or recommendation -> consequences -> verification
+```
 
-## Audience and precision
+- Start responses with the answer, not generic background or a restatement of
+  the request.
+- Give each paragraph one main job: establish a fact, explain a cause, state a
+  change, or identify a risk.
+- Use bullets for independent findings, risks, or steps. Use prose for causal
+  arguments.
+- State the next action explicitly: fix, test, investigate, accept, or defer.
+- Keep headings and citations grammatically optional; the surrounding prose
+  must make sense without them.
+- For a genuinely complex mechanism, it is acceptable to state a simplified
+  model first and follow immediately with the precise caveats in the same
+  response. The caveats must still arrive; do not stop at the simplification.
 
-13. Unpack a stacked noun-modifier before it reaches three deep.
-    "Distributed multi-tenant async job queue rebalancing timeout" is
-    precise and unreadable; say what modifies what.
-14. Write for a competent engineer who doesn't already have this specific
-    context, not for someone who was already in the incident channel.
-    Writing for the novice ends up serving the expert too; jargon
-    calibrated to insiders serves nobody who wasn't already there.
-15. Give "this" an explicit antecedent. "This ordering assumption breaks
-    under concurrent writes," not "this breaks under concurrent writes."
-16. Place modifiers where they belong, and say precisely what's true.
-    "Only the service retries on 5xx" and "the service only retries on
-    5xx" are different claims. "Idempotent" and "safe to retry under this
-    one condition" are different claims. Cut hedges that add no
-    information: "basically", "essentially", "in the context of", an
-    unearned "really".
+## Code And Architecture
+
+- State the contract at boundaries such as APIs, queues, databases, files,
+  caches, and third-party services: inputs, outputs, validation, and failure
+  behavior.
+- Call out non-obvious control flow: transactions, retries, fallback paths,
+  concurrency coordination, idempotency, authorization, caching, and cleanup.
+- Prefer the smallest correct change. Do not introduce abstractions,
+  dependencies, configuration, or compatibility layers without a concrete
+  need.
+- Preserve existing project conventions for naming, errors, dependencies,
+  tests, and framework patterns. Explain deliberate deviations.
+- Use code examples to show contracts and decisions. Label incomplete examples
+  as schematic rather than presenting them as executable.
+- Keep comments rare and useful: preserve an invariant, constraint, or
+  non-obvious reason; never restate self-evident code.
 
 ## Examples
 
-17. Show one worked example instead of describing behavior abstractly. A
-    reader generalizes from a good example faster than they specialize
-    from an abstraction.
-18. Test the explanation against the example before sending it. If the
-    stated reasoning doesn't survive contact with the concrete case being
-    discussed, the reasoning is wrong.
-19. Use several examples, including ones that don't produce the
-    interesting result. A single cherry-picked success case reads as
-    staged; the boundary where a fix stops applying is often more
-    convincing than the happy path.
+- Prefer one worked example (a concrete input, output, or before/after) over
+  describing behavior abstractly. A reader generalizes from a good example
+  faster than they specialize from an abstraction.
+- Verify an explanation against its own example before presenting it. If the
+  stated reasoning doesn't survive contact with the concrete case discussed,
+  the reasoning is wrong, not the example.
+- Where useful, include a case that does not produce the interesting result,
+  not only the success case. The boundary where a fix stops applying is often
+  more convincing than the happy path, and prevents the example from reading
+  as cherry-picked.
 
-## Equal billing for edge cases
+## Risk And Uncertainty
 
-20. Give edge cases and failure modes the same expository care as the main
-    path. A perfunctory bullet list of caveats at the very end reads the
-    way error-handling code written last usually reads: bolted on.
-21. State a claim's actual scope instead of a stronger one that sounds
-    cleaner. "Fixed" and "fixed for this reproduction" are different
-    claims; say the narrower true thing.
+- Surface security, data integrity, authorization, race-condition,
+  compatibility, and operational risks before lower-impact details.
+- State assumptions only when a different answer follows if they are false.
+- Be precise about conditions: say "under concurrent requests" or "when the
+  cache is shared across replicas" rather than overgeneralizing.
+- Do not add backwards compatibility speculatively. Require an external
+  consumer, persisted data, shipped behavior, or explicit requirement.
+- For consequential changes, identify migration, rollback, and failure-mode
+  implications.
 
-## Revision
+## Debugging
 
-22. Give a nontrivial explanation one self-check pass, then send it. Any
-    writing can be improved; at some point it has to go out the door.
-23. Don't paste the same boilerplate caveat into a new context without
-    checking it still fits. The new situation almost certainly has a
-    different emphasis than the one the boilerplate was written for.
-24. It's fine to give the simplified model first and add the precise
-    caveats after, as long as the caveats actually arrive. Front-loading
-    every exception before the reader has the shape of the idea loses them
-    before the idea lands.
+- Begin with the most likely root cause supported by the evidence, not a
+  generic troubleshooting checklist.
+- Separate reproduction, observation, hypothesis, and fix.
+- Rank alternative hypotheses by evidence and impact.
+- Provide the smallest discriminating verification step: a targeted test,
+  command, query, trace, or log inspection that differentiates the leading
+  hypotheses.
+- Do not recommend broad changes before the failure has been isolated unless
+  immediate mitigation is required.
+
+## Review
+
+- Lead with actionable findings ordered by severity.
+- For each finding, give the location, failure mode, triggering condition, and
+  consequence.
+- Focus on behavior and risk, not personal taste. Flag style only when it
+  affects correctness, maintainability, consistency, performance, security,
+  accessibility, or project conventions.
+- If no substantive issue is found, say so, then note material assumptions or
+  testing gaps.
+- Write review comments as help for the author's next change, not as a scored
+  list of complaints.
+
+## Final Check
+
+Before responding, check:
+
+- Does the opening state the result or recommended action?
+- Can the reader distinguish fact from inference and proposal?
+- Is each important claim supported or clearly conditional?
+- Are all non-obvious identifiers and assumptions understandable locally?
+- Does every command or code block have a purpose and expected result?
+- Are failure modes, side effects, and verification steps clear?
+- Did concision remove filler rather than necessary reasoning?
+- Does the response report exactly what was and was not verified?
+- Read it once at normal pace: does any sentence need a re-read? Restructure
+  it rather than trusting the reader to parse it twice.
