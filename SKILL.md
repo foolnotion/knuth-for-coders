@@ -30,10 +30,13 @@ of causal reasoning, conditions, or verification.
 7. Explain behavior, invariants, side effects, failure paths, and tradeoffs;
    do not narrate obvious syntax line by line.
 8. Connect nontrivial code, commands, formulas, and claims with prose that
-   says what they establish and why they matter.
+   says what they establish and why they matter. Explain only the evidence,
+   risk, or mechanism that changes the conclusion.
 9. Make sentences understandable from left to right. Prefer direct verbs,
    concrete subjects, and unambiguous references over dense noun stacks and
-   vague pronouns.
+   vague pronouns. Keep each sentence focused on one thought. Split
+   independent clauses when their relationship is not immediately clear; do
+   not stack unrelated claims with "and."
 10. Be concise by removing filler, not reasoning. Keep words such as
     "because", "if", "unless", and "therefore" when they expose a
     dependency or constraint.
@@ -59,11 +62,11 @@ of causal reasoning, conditions, or verification.
 - Prefer role names such as `producer` and `consumer` over arbitrary indexes
   such as `client1` and `client2` when the roles are what distinguish them.
 - Prefer a direct statement or inclusive "we" over passive voice and
-  first-person hedging. Use parallel syntax for genuinely parallel ideas, but
-  vary sentence shape when the ideas differ.
-- State an important definition or decision twice in complementary forms when
-  that helps a skimming reader: once formally or operationally, then once in
-  plain language.
+  first-person hedging. Use parallel syntax when ideas are genuinely
+  parallel; otherwise make their different roles explicit.
+- State an important definition or decision twice in complementary forms only
+  when a single plain-language statement would leave a skimming reader unsure
+  of its scope.
 - Write so the explanation holds together when a reader skips every code
   block. Pull a load-bearing line, configuration value, or command onto its
   own line if it will be referenced later.
@@ -74,8 +77,33 @@ of causal reasoning, conditions, or verification.
 - Give "this" an explicit antecedent. Place modifiers where they make the
   intended scope exact, and remove hedges that add no information.
 - Give edge cases and failure modes the same explanatory care as the main
-  path. State the narrowest true scope: "fixed for this reproduction" is not
-  the same claim as "fixed".
+  path when they change the implementation, recommendation, or verification.
+  State the narrowest true scope: "fixed for this reproduction" is not the
+  same claim as "fixed".
+
+## Controlled Technical English
+
+Use these rules to make prose direct and easy to scan. They are inspired by
+controlled technical English, not a claim of ASD-STE100 compliance.
+
+- Use common, concrete words. Prefer a verb over an abstract noun: "the cache
+  expires" rather than "cache expiration occurs."
+- Preserve the codebase's exact terms. Do not replace identifiers, protocol
+  names, or error names with simpler but less precise words.
+- Do not use idioms, rhetorical questions, intensifiers, or throat-clearing.
+  Remove "clearly," "simply," "notably," and "it is worth noting" unless the
+  word changes the claim.
+- Keep a sentence to one claim. Add a second clause only to state a necessary
+  condition, cause, contrast, or consequence.
+- Replace an unnamed pronoun with a concrete noun when doing so is shorter or
+  clearer.
+- Limit noun stacks. If three or more nouns modify one noun, rewrite the
+  phrase with a verb or preposition unless it is an established technical
+  term.
+- Prefer a short bullet list over a paragraph that contains three or more
+  independent facts.
+- State a fact once. Restate it only when the second form resolves a real
+  ambiguity.
 
 ## Response Structure
 
@@ -95,16 +123,18 @@ Context -> finding -> cause -> change or recommendation -> consequences -> verif
 - Keep headings and citations grammatically optional; the surrounding prose
   must make sense without them.
 - For a genuinely complex mechanism, it is acceptable to state a simplified
-  model first and follow immediately with the precise caveats in the same
-  response. The caveats must still arrive; do not stop at the simplification.
+  model first only when it is needed to understand the decision; otherwise
+  state the precise conclusion. When using a simplified model, follow it
+  immediately with the caveats that materially change its scope.
 
 ## Code And Architecture
 
 - State the contract at boundaries such as APIs, queues, databases, files,
   caches, and third-party services: inputs, outputs, validation, and failure
   behavior.
-- Call out non-obvious control flow: transactions, retries, fallback paths,
-  concurrency coordination, idempotency, authorization, caching, and cleanup.
+- Call out non-obvious control flow that the change exercises: transactions,
+  retries, fallback paths, concurrency coordination, idempotency,
+  authorization, caching, and cleanup.
 - Prefer the smallest correct change. Do not introduce abstractions,
   dependencies, configuration, or compatibility layers without a concrete
   need.
@@ -117,9 +147,10 @@ Context -> finding -> cause -> change or recommendation -> consequences -> verif
 
 ## Examples
 
-- Prefer one worked example (a concrete input, output, or before/after) over
-  describing behavior abstractly. A reader generalizes from a good example
-  faster than they specialize from an abstraction.
+- Use one worked example (a concrete input, output, or before/after) when it
+  establishes behavior that prose and a file reference could reasonably
+  misstate. A reader generalizes from a good example faster than they
+  specialize from an abstraction.
 - Verify an explanation against its own example before presenting it. If the
   stated reasoning doesn't survive contact with the concrete case discussed,
   the reasoning is wrong, not the example.
